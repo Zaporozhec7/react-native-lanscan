@@ -85,7 +85,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void stop() {
-        new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
+            new GuardedAsyncTask<Void, Void>(getReactApplicationContext().getExceptionHandler()) {
             @Override
             protected void doInBackgroundGuarded(Void... params) {
                 ((ThreadPoolExecutor)ManagedThreadPoolExecutor.THREAD_POOL_EXECUTOR_PINGS).shutdownNow();
@@ -142,7 +142,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
 
 
                 //awaitTermination of the sendDatagram tasks after locking them with shutdown inside an AsyncTask (no ui framedrops)
-                new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
+                new GuardedAsyncTask<Void, Void>(getReactApplicationContext().getExceptionHandler()) {
                     @Override
                     protected void doInBackgroundGuarded(Void... params) {
 
@@ -273,7 +273,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
 
             //Log.wtf("STARTING TASK : ", "STARTING RECEIVER TASK FOR " + broadcastAddr);
             // Execute a receiver task in the background to start waiting for LAN replies before sending packets
-            final AsyncTask guarded_receive_task = new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
+            final AsyncTask guarded_receive_task = new GuardedAsyncTask<Void, Void>(getReactApplicationContext().getExceptionHandler()) {
                 @Override
                 protected void doInBackgroundGuarded(Void... params) {
                     byte[] receiveData = new byte[6]; // waiting for the message "RNLSOK"
@@ -358,7 +358,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
             //Log.wtf("STARTING TASK : ", "STARTING SENDER TASK FOR " + broadcastAddr);
             // start sending packets on a background task until it is cancelled then trigger end broadcast event
             // if it is a broadcast address
-            final AsyncTask guarded_send_task = new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
+            final AsyncTask guarded_send_task = new GuardedAsyncTask<Void, Void>(getReactApplicationContext().getExceptionHandler()) {
                 @Override
                 protected void doInBackgroundGuarded(Void... params) {
 
@@ -388,7 +388,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
             }.executeOnExecutor(thread_pool);
 
             // run a sleep task on the background to wait for the timeout
-            new GuardedAsyncTask<Void, Void>(getReactApplicationContext()) {
+            new GuardedAsyncTask<Void, Void>(getReactApplicationContext().getExceptionHandler()) {
                 @Override
                 protected void doInBackgroundGuarded(Void... params) {
                     SystemClock.sleep(timeout_ms);
@@ -414,7 +414,7 @@ public class LANScanModule extends ReactContextBaseJavaModule {
     private boolean getInfo() {
         sendEvent(getReactApplicationContext(), EVENT_STARTFETCH, null);
 
-        WifiManager wifi_manager= (WifiManager) getReactApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifi_manager= (WifiManager) getReactApplicationContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         dhcp_info=wifi_manager.getDhcpInfo();
 
         try {
