@@ -1,8 +1,6 @@
 package com.odinvt.lanscan.impl;
 
 
-import android.support.annotation.NonNull;
-
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -21,7 +19,7 @@ public class ManagedThreadPoolExecutor {
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
-        public Thread newThread(@NonNull Runnable r) {
+        public Thread newThread(Runnable r) {
             return new Thread(r, "AsyncTask #" + mCount.getAndIncrement());
         }
     };
